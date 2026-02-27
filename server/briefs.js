@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { exists, makeId, readJson, writeJsonAtomic, listDirs } from './fsdb.js';
+import { exists, makeId, readJson, writeJsonAtomic, listDirs, isReadOnlyRuntime } from './fsdb.js';
 
 // Convention:
 // Vault/Projects/<Project>/Creative Brief/<briefSlug?>/<vN>/...
@@ -52,7 +52,12 @@ export async function ensureBriefJson(briefRoot) {
     if (!existing.id || existing.id === '__AUTO__') existing.id = makeId(briefRoot);
     existing.briefRoot = briefRoot;
     if (!existing.updatedAt) existing.updatedAt = new Date().toISOString();
-    await writeJsonAtomic(p, existing);
+
+    // In serverless (Vercel), the filesystem is read-only. Don't try to “heal” files.
+    if (!isReadOnlyRuntime()) {
+      await writeJsonAtomic(p, existing);
+    }
+
     return existing;
   }
 
@@ -75,7 +80,11 @@ export async function ensureBriefJson(briefRoot) {
     briefRoot
   };
 
-  await writeJsonAtomic(p, data);
+  // In serverless (Vercel), the filesystem is read-only. We can still *infer* brief.json
+  // so the UI works, but we won't persist it.
+  if (!isReadOnlyRuntime()) {
+    await writeJsonAtomic(p, data);
+  }
   return data;
 }
 
