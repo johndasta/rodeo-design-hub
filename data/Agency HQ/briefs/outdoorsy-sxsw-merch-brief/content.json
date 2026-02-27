@@ -1,0 +1,61 @@
+{
+  "hero": {
+    "title": "Outdoorsy — SXSW Creative Brief",
+    "dek": "Native Rodeo brief (not embedded). Source HTML was used only as a style reference.",
+    "pills": ["tee + hat + sticker", "SXSW / Austin", "RV travel", "text required"]
+  },
+  "mustInclude": {
+    "text": ["Outdoorsy", "SXSW", "ATX"],
+    "notes": "ATX is acceptable; if you need the long form, use Austin, TX. Keep type bold + readable for screenprint/embroidery."
+  },
+  "gallery": {
+    "title": "Concept Gallery",
+    "items": [
+      {
+        "src": "v1/images/001-tmp_route-01.png",
+        "title": "Route Marker",
+        "caption": "ATX shield + RV silhouette + Texas star. Text: Outdoorsy + SXSW."
+      },
+      {
+        "src": "v1/images/001-tmp_pick-05.png",
+        "title": "Guitar Pick",
+        "caption": "SXSW music nod, road leading to RV. Text includes ATX."
+      },
+      {
+        "src": "v1/images/001-tmp_pin-09.png",
+        "title": "Map Pin",
+        "caption": "Campsite scene inside pin. Text: Outdoorsy + SXSW + ATX."
+      }
+    ]
+  },
+  "shortlist": {
+    "recommend": "Route Marker \"ATX\" — strongest silhouette + instant Austin read + easiest to tighten into a final mark.",
+    "alsoStrong": "Guitar Pick + Road — SXSW nod that doesn’t feel corporate; good sticker energy.",
+    "wildcard": "Map Pin Campsite — most logo-like and scalable, but can get busy if details creep in."
+  },
+  "directions": [
+    {
+      "title": "Direction A — Route Marker \"ATX\"",
+      "tag": "Austin highway badge + RV silhouette + Texas star",
+      "why": "Instant recognizability. Looks like merch you’d buy even if you weren’t on the team.",
+      "refine": "Lock type hierarchy (Outdoorsy primary), pick 1 star placement, simplify RV shape."
+    },
+    {
+      "title": "Direction B — Guitar Pick + Road",
+      "tag": "SXSW music nod + road-trip story",
+      "why": "Feels festival-native. The road-to-SXSW story is built-in.",
+      "refine": "Reduce internal detail; keep road bold and RV super simple so it holds on hats."
+    },
+    {
+      "title": "Direction C — Map Pin Campsite",
+      "tag": "Product story in one icon",
+      "why": "Most scalable mark option; can live beyond SXSW if we drop the event text.",
+      "refine": "One interior motif only (RV OR campsite). Avoid tiny trees/lines."
+    }
+  ],
+  "notes": [
+    "Text must include: Outdoorsy + SXSW + ATX (or Austin, TX depending on direction).",
+    "Keep a 1–3 color version as the core. No gradients.",
+    "Next step: pick a winning direction, then generate 6–10 tighter variations."
+  ]
+}

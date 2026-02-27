@@ -55,10 +55,6 @@ body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
 .briefPreview{width:100%; background:#fff; overflow:auto; padding:0 0 18px;}
 @media (min-width: 1200px){.briefPreview{height:calc(100vh - 220px);} }
 
-/* Make embedded editorial pages feel native */
-.briefPreview img{max-width:100%; height:auto;}
-.briefPreview *{max-width:100%;}
-
 .detail-head{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;}
 .kicker{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
 .detail h1{margin:6px 0 0; font-size:22px;}
@@ -89,3 +85,68 @@ input{padding:10px; border:0; border-radius:12px; font-family:var(--sans); backg
 .review .who{font-family:var(--mono); font-size:12px; color:var(--muted);}
 .review .decision{font-weight:700;}
 .review .comment{margin-top:8px; white-space:pre-wrap;}
+
+/* === Rodeo native brief doc (Outdoorsy brief vibe) === */
+.rd-doc{
+  --bg:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --max: 760px;
+  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.7;
+}
+
+.rd-h1{
+  font-family: var(--serif);
+  font-size: 46px;
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  margin: 0 0 10px;
+}
+
+.rd-dek{font-size:17px; color:var(--muted); margin:0 0 18px;}
+
+.rd-meta{display:flex; gap:10px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; color:var(--muted); margin:12px 0 18px;}
+.rd-pill{border:1px solid var(--line); padding:6px 10px; border-radius:999px; background:#fafafa;}
+
+.rd-callout{border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:14px 0 18px; background:#fafafa;}
+.rd-callout b{font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase;}
+.rd-small{color:var(--muted); font-size:13px; margin-top:6px;}
+
+.rd-h2{font-size:20px; margin:30px 0 10px; letter-spacing:-.01em;}
+.rd-h3{margin:0; font-size:15px;}
+
+.rd-thumbgrid{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; margin:12px 0 10px;}
+@media (max-width: 860px){.rd-thumbgrid{grid-template-columns: repeat(2, minmax(0,1fr));}}
+@media (max-width: 520px){.rd-thumbgrid{grid-template-columns: 1fr;}}
+
+.rd-thumb{margin:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fff;}
+.rd-thumb button{all:unset; display:block; cursor:pointer; width:100%;}
+.rd-thumb img{display:block; width:100%; aspect-ratio: 4 / 3; object-fit: cover; background:#fff;}
+.rd-thumb figcaption{padding:9px 11px 11px; color:var(--muted); font-size:12px;}
+.rd-thumb figcaption b{color:var(--text);} 
+
+.rd-card{border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff;}
+.rd-row{display:grid; grid-template-columns: 140px 1fr; gap:12px; padding:8px 0; border-top:1px solid #f3f4f6;}
+.rd-row:first-child{border-top:0; padding-top:0;}
+.rd-k{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
+.rd-v{font-size:14px; color:var(--text);} 
+
+.rd-dir{border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff; margin:12px 0;}
+.rd-tag{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:4px;}
+.rd-why{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;}
+@media (max-width: 720px){.rd-why{grid-template-columns:1fr;}}
+.rd-box{border:1px solid var(--line); border-radius:12px; padding:10px; background:#fafafa;}
+.rd-box strong{display:block; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;}
+
+.rd-ul{margin:10px 0 14px 18px;}
+.rd-ul li{margin:6px 0;}

@@ -136,7 +136,10 @@ export async function getBrief(vaultRoot, id) {
     const feedback = await readJson(feedbackPath, { reviews: [], requests: [] });
     const versions = await listVersions(root);
 
-    return { brief, feedback, versions };
+    const contentFile = brief.contentPath || 'content.json';
+    const content = await readJson(path.join(root, contentFile), null);
+
+    return { brief, feedback, versions, content };
   }
   return null;
 }

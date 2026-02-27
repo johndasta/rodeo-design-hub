@@ -121,69 +121,110 @@ async function selectBrief(id){
   const pUpd = el('div','pill'); pUpd.textContent = `updated: ${fmt(b.updatedAt)}`;
   $('#detailMeta').append(pStatus,pVer,pUpd);
 
-  // Render editorial page into the right pane (no iframe).
-  const version = b.currentVersion || 'v1';
-
-  // Prefer an explicit source HTML (legacy Projects/* brief) when provided.
-  const sourceHtml = b.sourceHtml;
-  const url = sourceHtml
-    ? `/api/projects-brief/${sourceHtml}`
-    : `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/index.html`;
-
-  $('#openSite').href = url;
-
-  async function loadPreview(){
-    const res = await fetch(url, { cache: 'no-store' });
-    const html = await res.text();
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-
-    // Strip scripts for safety.
-    doc.querySelectorAll('script').forEach(s => s.remove());
-
-    // Rebase relative asset URLs so images/CSS load correctly.
-    const base = sourceHtml
-      ? `/api/projects-brief/${sourceHtml.split('/').slice(0,-1).join('/')}/`
-      : `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/`;
-
-    const imgBase = sourceHtml
-      ? base + 'assets/'
-      : `/api/brief-site/${encodeURIComponent(b.id)}/images/`; // handles legacy ../images refs
-
-    const reb = (v) => {
-      if (!v) return v;
-      if (v.startsWith('http:') || v.startsWith('https:') || v.startsWith('data:') || v.startsWith('#')) return v;
-      if (v.startsWith('/')) return v;
-
-      // Handle legacy relative paths like ../images/foo.png
-      if (v.startsWith('../images/')) return imgBase + v.slice('../images/'.length);
-      if (v.startsWith('./images/')) return imgBase + v.slice('./images/'.length);
-      if (v.startsWith('images/')) return imgBase + v.slice('images/'.length);
-
-      // Default: treat as relative to the site folder
-      return base + v.replace(/^\.\//,'');
-    };
-
-    doc.querySelectorAll('img').forEach(img => img.setAttribute('src', reb(img.getAttribute('src'))));
-    doc.querySelectorAll('link[rel="stylesheet"]').forEach(l => l.setAttribute('href', reb(l.getAttribute('href'))));
-    doc.querySelectorAll('a').forEach(a => {
-      const href = a.getAttribute('href');
-      if (!href) return;
-      if (href.toLowerCase().endsWith('.png') || href.toLowerCase().endsWith('.jpg') || href.toLowerCase().endsWith('.jpeg') || href.toLowerCase().endsWith('.webp')) {
-        a.setAttribute('href', reb(href));
-      }
-    });
-
-    const body = doc.body;
-    const preview = $('#briefPreview');
-    preview.innerHTML = '';
-    // Wrap body content
-    const wrapper = document.createElement('div');
-    wrapper.append(...Array.from(body.childNodes));
-    preview.appendChild(wrapper);
+  // Native Rodeo rendering (no embedded HTML).
+  const content = out.content;
+  if (!content) {
+    $('#briefPreview').innerHTML = '<div class="muted" style="padding:16px">No content.json found for this brief yet.</div>';
+    $('#btnReload').onclick = ()=>selectBrief(b.id);
+    $('#openSite').href = '#';
+    return;
   }
 
-  await loadPreview();
-  $('#btnReload').onclick = ()=>loadPreview();
+  $('#openSite').href = '#';
+  $('#btnReload').onclick = ()=>selectBrief(b.id);
+
+  function h(tag, cls, txt){
+    const e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(txt!=null) e.textContent = txt;
+    return e;
+  }
+
+  function renderGallery(items){
+    const grid = h('div','rd-thumbgrid');
+    items.forEach((it, idx)=>{
+      const fig = h('figure','rd-thumb');
+      const btn = h('button');
+      btn.type = 'button';
+      const img = document.createElement('img');
+      img.alt = it.caption || it.title || `Concept ${idx+1}`;
+      img.src = `/api/brief-site/${encodeURIComponent(b.id)}/images/${it.src.split('/').slice(-1)[0]}`;
+      // If src is already relative (v1/images/...), try using it as-is via brief-site images mapping
+      if (it.src.includes('/')) {
+        const name = it.src.split('/').pop();
+        img.src = `/api/brief-site/${encodeURIComponent(b.id)}/images/${name}`;
+      }
+      btn.appendChild(img);
+      fig.appendChild(btn);
+      const cap = h('figcaption', null);
+      const strong = h('b', null, it.title || 'Concept');
+      cap.appendChild(strong);
+      cap.appendChild(document.createTextNode(it.caption ? ` — ${it.caption}` : ''));
+      fig.appendChild(cap);
+      grid.appendChild(fig);
+    });
+    return grid;
+  }
+
+  const preview = $('#briefPreview');
+  preview.innerHTML = '';
+
+  const doc = h('div','rd-doc');
+
+  doc.appendChild(h('h1','rd-h1', content.hero?.title || b.title));
+  if (content.hero?.dek) doc.appendChild(h('p','rd-dek', content.hero.dek));
+
+  if (Array.isArray(content.hero?.pills) && content.hero.pills.length) {
+    const meta = h('div','rd-meta');
+    content.hero.pills.forEach(p=> meta.appendChild(h('div','rd-pill', p)));
+    doc.appendChild(meta);
+  }
+
+  if (content.mustInclude) {
+    const call = h('div','rd-callout');
+    call.innerHTML = `<b>MUST INCLUDE</b><br/>Text: ${(content.mustInclude.text||[]).join(' + ')}<div class="rd-small">${content.mustInclude.notes||''}</div>`;
+    doc.appendChild(call);
+  }
+
+  if (content.gallery?.items?.length) {
+    doc.appendChild(h('h2','rd-h2', content.gallery.title || 'Gallery'));
+    doc.appendChild(renderGallery(content.gallery.items));
+  }
+
+  if (content.shortlist) {
+    doc.appendChild(h('h2','rd-h2', 'Shortlist'));
+    const box = h('div','rd-card');
+    box.innerHTML = `
+      <div class="rd-row"><div class="rd-k">Recommend</div><div class="rd-v"><b>${content.shortlist.recommend||''}</b></div></div>
+      <div class="rd-row"><div class="rd-k">Also strong</div><div class="rd-v">${content.shortlist.alsoStrong||''}</div></div>
+      <div class="rd-row"><div class="rd-k">Wildcard</div><div class="rd-v">${content.shortlist.wildcard||''}</div></div>
+    `;
+    doc.appendChild(box);
+  }
+
+  if (Array.isArray(content.directions) && content.directions.length) {
+    doc.appendChild(h('h2','rd-h2', 'Directions'));
+    content.directions.forEach(d=>{
+      const dir = h('div','rd-dir');
+      dir.appendChild(h('h3','rd-h3', d.title || 'Direction'));
+      if (d.tag) dir.appendChild(h('div','rd-tag', d.tag));
+      const why = h('div','rd-why');
+      const a = h('div','rd-box'); a.innerHTML = `<strong>Why it works</strong>${d.why||''}`;
+      const b2 = h('div','rd-box'); b2.innerHTML = `<strong>Refine next</strong>${d.refine||''}`;
+      why.append(a,b2);
+      dir.appendChild(why);
+      doc.appendChild(dir);
+    });
+  }
+
+  if (Array.isArray(content.notes) && content.notes.length) {
+    doc.appendChild(h('h2','rd-h2', 'Notes'));
+    const ul = h('ul','rd-ul');
+    content.notes.forEach(n=> ul.appendChild(h('li',null,n)));
+    doc.appendChild(ul);
+  }
+
+  preview.appendChild(doc);
 
   $('#fromVersion').value = b.currentVersion || 'v1';
   $('#commentVersion').value = b.currentVersion || 'v1';
