@@ -123,7 +123,13 @@ async function selectBrief(id){
 
   // Render editorial page into the right pane (no iframe).
   const version = b.currentVersion || 'v1';
-  const url = `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/index.html`;
+
+  // Prefer an explicit source HTML (legacy Projects/* brief) when provided.
+  const sourceHtml = b.sourceHtml;
+  const url = sourceHtml
+    ? `/api/projects-brief/${sourceHtml}`
+    : `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/index.html`;
+
   $('#openSite').href = url;
 
   async function loadPreview(){
@@ -135,8 +141,13 @@ async function selectBrief(id){
     doc.querySelectorAll('script').forEach(s => s.remove());
 
     // Rebase relative asset URLs so images/CSS load correctly.
-    const base = `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/`;
-    const imgBase = `/api/brief-site/${encodeURIComponent(b.id)}/images/`; // handles legacy ../images refs
+    const base = sourceHtml
+      ? `/api/projects-brief/${sourceHtml.split('/').slice(0,-1).join('/')}/`
+      : `/api/brief-site/${encodeURIComponent(b.id)}/${encodeURIComponent(version)}/`;
+
+    const imgBase = sourceHtml
+      ? base + 'assets/'
+      : `/api/brief-site/${encodeURIComponent(b.id)}/images/`; // handles legacy ../images refs
 
     const reb = (v) => {
       if (!v) return v;

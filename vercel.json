@@ -9,6 +9,8 @@
     { "source": "/brief-images/:path*", "destination": "/api/brief-images?parts=:path*" },
 
     { "source": "/api/brief-site/:path*", "destination": "/api/brief-site?parts=:path*" },
-    { "source": "/api/brief-images/:path*", "destination": "/api/brief-images?parts=:path*" }
+    { "source": "/api/brief-images/:path*", "destination": "/api/brief-images?parts=:path*" },
+
+    { "source": "/api/projects-brief/:path*", "destination": "/api/projects-brief?parts=:path*" }
   ]
 }
