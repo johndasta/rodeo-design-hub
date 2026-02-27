@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/brief-site/:path*", "destination": "/api/brief-site/:path*" },
+    { "source": "/brief-images/:path*", "destination": "/api/brief-images/:path*" }
+  ]
+}
