@@ -5,7 +5,10 @@
     }
   },
   "rewrites": [
-    { "source": "/brief-site/:path*", "destination": "/api/brief-site/:path*" },
-    { "source": "/brief-images/:path*", "destination": "/api/brief-images/:path*" }
+    { "source": "/brief-site/:path*", "destination": "/api/brief-site?parts=:path*" },
+    { "source": "/brief-images/:path*", "destination": "/api/brief-images?parts=:path*" },
+
+    { "source": "/api/brief-site/:path*", "destination": "/api/brief-site?parts=:path*" },
+    { "source": "/api/brief-images/:path*", "destination": "/api/brief-images?parts=:path*" }
   ]
 }
