@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rodeo Design Hub</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Rodeo</div>
+      <div class="title">Design Hub</div>
+      <div class="spacer"></div>
+      <div class="muted" id="vault"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <aside class="sidebar">
+      <div class="section-title">Briefs</div>
+      <div class="filters">
+        <button class="chip" data-filter="all">All</button>
+        <button class="chip" data-filter="needs">Needs action</button>
+        <button class="chip" data-filter="review">Needs Review</button>
+        <button class="chip" data-filter="changes">Needs Changes</button>
+        <button class="chip" data-filter="approved">Approved</button>
+        <button class="chip" data-filter="archived">Archived</button>
+      </div>
+      <div id="briefList" class="list"></div>
+    </aside>
+
+    <section class="content">
+      <div id="empty" class="empty">
+        <h1>Rodeo Design Hub</h1>
+        <p class="muted">Select a brief on the left. The Outdoorsy-style editorial brief opens on the right.</p>
+      </div>
+
+      <div id="detail" class="detail hidden">
+        <div class="right">
+          <div class="reviewTop">
+            <div class="detail-head">
+              <div>
+                <div class="kicker" id="detailProject"></div>
+                <h1 id="detailTitle"></h1>
+                <div class="meta" id="detailMeta"></div>
+              </div>
+              <div class="actions">
+                <button class="btn good" id="btnApprove">👍 Approve</button>
+                <button class="btn bad" id="btnNeeds">👎 Needs changes</button>
+              </div>
+            </div>
+
+            <div class="editorTop">
+              <div class="editorKicker">Brief</div>
+              <div class="editorControls">
+                <button class="btn" id="btnReload">Reload</button>
+                <a class="btn" id="openSite" href="#" target="_blank" rel="noreferrer">Open</a>
+              </div>
+            </div>
+          </div>
+
+          <div id="briefPreview" class="briefPreview"></div>
+
+          <div class="stack">
+            <div class="card soft">
+              <div class="card-title">Request next version</div>
+              <div class="card-body">
+                <textarea id="requestNotes" placeholder="Tell Woody what to change / keep / explore…"></textarea>
+                <div class="row2">
+                  <input id="fromVersion" placeholder="from version (e.g. v1)" />
+                  <button class="btn" id="btnRequest">Request v2/v3</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card soft">
+              <div class="card-title">Comment</div>
+              <div class="card-body">
+                <textarea id="comment" placeholder="Add a note…"></textarea>
+                <div class="row2">
+                  <input id="commentVersion" placeholder="version (e.g. v1)" />
+                  <button class="btn" id="btnComment">Add</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card soft">
+              <div class="card-title">Review history</div>
+              <div class="card-body" id="reviewHistory"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

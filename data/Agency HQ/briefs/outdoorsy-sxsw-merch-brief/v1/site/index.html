@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outdoorsy — SXSW Merch Graphic v1</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --max: 760px;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    html{scroll-behavior:smooth;}
+    body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.7;}
+    a{color:inherit; text-decoration:none; border-bottom:1px solid rgba(17,24,39,.22);} 
+    a:hover{border-bottom-color:rgba(17,24,39,.65)}
+
+    .topbar{position:sticky; top:0; z-index:20; background:rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      border-bottom:1px solid var(--line);} 
+    .topbar-inner{max-width:calc(var(--max) + 180px); margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:12px;}
+    .brand{font-family:var(--mono); font-size:12px; color:var(--muted);} 
+    .title{font-weight:650; font-size:13px; letter-spacing:.01em;}
+    .toc{margin-left:auto; display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .toc a{border:0; color:var(--muted); font-size:12px; padding:6px 8px; border-radius:999px;}
+    .toc a:hover{background:#f3f4f6; color:var(--text);} 
+
+    article{max-width:var(--max); margin:0 auto; padding:34px 18px 90px;}
+
+    h1{font-family:var(--serif); font-size:46px; line-height:1.12; letter-spacing:-.02em; margin:0 0 10px;}
+    .dek{font-size:17px; color:var(--muted); margin:0 0 18px;}
+
+    .meta{display:flex; gap:10px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; color:var(--muted); margin:12px 0 18px;}
+    .pill{border:1px solid var(--line); padding:6px 10px; border-radius:999px; background:#fafafa;}
+
+    .callout{border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:14px 0 18px; background:#fafafa;}
+    .callout b{font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase;}
+
+    h2{font-size:20px; margin:30px 0 10px; letter-spacing:-.01em;}
+    p{margin:10px 0;}
+    ul{margin:10px 0 14px 18px;}
+    li{margin:6px 0;}
+    .small{color:var(--muted); font-size:13px;}
+
+    .quick{display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin:14px 0 10px;}
+    @media (max-width: 720px){.quick{grid-template-columns:1fr;}}
+    .qcard{border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff;}
+    .qcard .k{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
+    .qcard .v{margin-top:8px; font-size:14px;}
+
+    .thumbgrid{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; margin:12px 0 10px;}
+    @media (max-width: 860px){.thumbgrid{grid-template-columns: repeat(2, minmax(0,1fr));}}
+    @media (max-width: 520px){.thumbgrid{grid-template-columns: 1fr;}}
+
+    .thumb{margin:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fff;}
+    .thumb button{all:unset; display:block; cursor:pointer; width:100%;}
+    .thumb img{display:block; width:100%; aspect-ratio: 4 / 3; object-fit: cover; background:#fff;}
+    .thumb figcaption{padding:9px 11px 11px; color:var(--muted); font-size:12px;}
+    .thumb figcaption b{color:var(--text);} 
+
+    .directions{display:grid; grid-template-columns:1fr; gap:12px; margin:12px 0;}
+    .dir{border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff;}
+    .dir h3{margin:0; font-size:15px;}
+    .tag{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:4px;}
+    .why{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;}
+    @media (max-width: 720px){.why{grid-template-columns:1fr;}}
+    .box{border:1px solid var(--line); border-radius:12px; padding:10px; background:#fafafa;}
+    .box strong{display:block; font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;}
+
+    .lb{position:fixed; inset:0; display:none; z-index:50;}
+    .lb.open{display:block;}
+    .lb .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.75);} 
+    .lb .panel{position:absolute; inset:14px; display:grid; grid-template-rows:auto 1fr auto; gap:10px;}
+    @media (max-width: 720px){.lb .panel{inset:8px;}}
+    .lb .top{display:flex; align-items:center; justify-content:space-between; gap:10px; color:#fff; font-family:var(--mono); font-size:12px; opacity:.95;}
+    .lb .top .hint{opacity:.75;}
+
+    .lb .imgwrap{position:relative; display:flex; align-items:center; justify-content:center; height:calc(100vh - 190px);} 
+    @media (max-height: 720px){.lb .imgwrap{height:calc(100vh - 160px);} }
+    @media (max-height: 560px){.lb .imgwrap{height:calc(100vh - 140px);} }
+
+    .lb img{max-width:min(1100px, 96vw); max-height:100%; width:auto; height:auto; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.45); background:#111;}
+    .lb .cap{color:rgba(255,255,255,.85); font-size:13px; max-width:min(980px, 96vw); margin:0 auto; text-align:center;}
+
+    .lb .btn{all:unset; cursor:pointer; color:#fff; border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:8px 10px;}
+    .lb .btn:hover{border-color:rgba(255,255,255,.65)}
+    .lb .nav{position:absolute; top:50%; transform:translateY(-50%); display:flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:999px;}
+    .lb .prev{left:10px;}
+    .lb .next{right:10px;}
+
+    .footer{margin-top:34px; color:var(--muted); font-family:var(--mono); font-size:12px;}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Creative Brief</div>
+      <div class="title">Outdoorsy — v1</div>
+      <nav class="toc" aria-label="Table of contents">
+        <a href="#gallery">Gallery</a>
+        <a href="#shortlist">Shortlist</a>
+        <a href="#directions">Directions</a>
+        <a href="#notes">Notes</a>
+      </nav>
+    </div>
+  </header>
+
+  <article>
+    <h1>Outdoorsy — SXSW Merch Graphic v1</h1>
+    <p class="dek">12 early renders up top, then the reasoning (short and useful). Built for tees + hats + stickers.</p>
+
+    <div class="meta">
+      <div class="pill">tee + hat + sticker</div>
+      <div class="pill">SXSW / Austin</div>
+      <div class="pill">RV travel</div>
+      <div class="pill">text required</div>
+    </div>
+
+    <div class="callout"><b>Must include</b><br/>Text: Outdoorsy + SXSW + Austin, TX <span class="small">(ATX acceptable in some directions)</span></div>
+
+    <section id="gallery">
+      <h2>Concept Gallery (12)</h2>
+      <p class="small">Click any tile for full-screen carousel.</p>
+
+      <div class="thumbgrid" id="thumbgrid">
+        <figure class="thumb" data-src="../images/001-tmp_route-01.png" data-cap="Route Marker — ATX shield + RV silhouette + Texas star. Text: Outdoorsy + SXSW.">
+          <button type="button" aria-label="Open Route Marker 01"><img src="../images/001-tmp_route-01.png" alt="Route Marker 01" /></button>
+          <figcaption><b>Route Marker</b> — ATX shield.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_route-02.png" data-cap="Route Marker (alt) — simplify silhouette and tighten type spacing.">
+          <button type="button" aria-label="Open Route Marker 02"><img src="../images/001-tmp_route-02.png" alt="Route Marker 02" /></button>
+          <figcaption><b>Route Marker</b> — alt.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_route-03.png" data-cap="Route Marker (alt) — bolder stroke weight for hat embroidery viability.">
+          <button type="button" aria-label="Open Route Marker 03"><img src="../images/001-tmp_route-03.png" alt="Route Marker 03" /></button>
+          <figcaption><b>Route Marker</b> — bolder lines.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_route-04.png" data-cap="Route Marker (alt) — different shield proportions + RV integration.">
+          <button type="button" aria-label="Open Route Marker 04"><img src="../images/001-tmp_route-04.png" alt="Route Marker 04" /></button>
+          <figcaption><b>Route Marker</b> — alt shape.</figcaption>
+        </figure>
+
+        <figure class="thumb" data-src="../images/001-tmp_pick-05.png" data-cap="Guitar Pick + Road — SXSW music nod, road leading to RV. Text includes Austin, TX.">
+          <button type="button" aria-label="Open Guitar Pick 05"><img src="../images/001-tmp_pick-05.png" alt="Guitar Pick 05" /></button>
+          <figcaption><b>Guitar Pick</b> — road + RV.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pick-06.png" data-cap="Guitar Pick (alt) — simplify interior, increase ATX readability.">
+          <button type="button" aria-label="Open Guitar Pick 06"><img src="../images/001-tmp_pick-06.png" alt="Guitar Pick 06" /></button>
+          <figcaption><b>Guitar Pick</b> — alt.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pick-07.png" data-cap="Guitar Pick (alt) — stronger silhouette, fewer micro-details.">
+          <button type="button" aria-label="Open Guitar Pick 07"><img src="../images/001-tmp_pick-07.png" alt="Guitar Pick 07" /></button>
+          <figcaption><b>Guitar Pick</b> — bold.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pick-08.png" data-cap="Guitar Pick (alt) — adjust type hierarchy: Outdoorsy primary.">
+          <button type="button" aria-label="Open Guitar Pick 08"><img src="../images/001-tmp_pick-08.png" alt="Guitar Pick 08" /></button>
+          <figcaption><b>Guitar Pick</b> — type-led.</figcaption>
+        </figure>
+
+        <figure class="thumb" data-src="../images/001-tmp_pin-09.png" data-cap="Map Pin Campsite — negative space scene inside pin. Text: Outdoorsy + SXSW + ATX.">
+          <button type="button" aria-label="Open Map Pin 09"><img src="../images/001-tmp_pin-09.png" alt="Map Pin 09" /></button>
+          <figcaption><b>Map Pin</b> — campsite.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pin-10.png" data-cap="Map Pin (alt) — simplify scene for small-size reliability.">
+          <button type="button" aria-label="Open Map Pin 10"><img src="../images/001-tmp_pin-10.png" alt="Map Pin 10" /></button>
+          <figcaption><b>Map Pin</b> — alt.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pin-11.png" data-cap="Map Pin (alt) — bolder ring text and higher contrast.">
+          <button type="button" aria-label="Open Map Pin 11"><img src="../images/001-tmp_pin-11.png" alt="Map Pin 11" /></button>
+          <figcaption><b>Map Pin</b> — bold.</figcaption>
+        </figure>
+        <figure class="thumb" data-src="../images/001-tmp_pin-12.png" data-cap="Map Pin (alt) — more logo-like, minimal interior.">
+          <button type="button" aria-label="Open Map Pin 12"><img src="../images/001-tmp_pin-12.png" alt="Map Pin 12" /></button>
+          <figcaption><b>Map Pin</b> — minimal.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="shortlist">
+      <h2>Shortlist</h2>
+      <div class="quick">
+        <div class="qcard">
+          <div class="k">Recommend</div>
+          <div class="v"><b>Route Marker “ATX”</b> — strongest silhouette + instant Austin read + easiest to tighten into a final mark.</div>
+        </div>
+        <div class="qcard">
+          <div class="k">Also strong</div>
+          <div class="v"><b>Guitar Pick + Road</b> — SXSW nod that doesn’t feel corporate; good sticker energy.</div>
+        </div>
+      </div>
+      <div class="qcard">
+        <div class="k">Wildcard</div>
+        <div class="v"><b>Map Pin Campsite</b> — most “logo-like” and scalable, but can get busy if details creep in.</div>
+      </div>
+    </section>
+
+    <section id="directions">
+      <h2>Directions</h2>
+      <div class="directions">
+        <div class="dir">
+          <h3>Direction A — Route Marker “ATX”</h3>
+          <div class="tag">Austin highway badge + RV silhouette + Texas star</div>
+          <div class="why">
+            <div class="box"><strong>Why it works</strong>Instant recognizability. Looks like merch you’d buy even if you weren’t “on the team.”</div>
+            <div class="box"><strong>Refine next</strong>Lock type hierarchy (Outdoorsy primary), pick 1 star placement, and simplify RV shape.</div>
+          </div>
+        </div>
+
+        <div class="dir">
+          <h3>Direction B — Guitar Pick + Road</h3>
+          <div class="tag">SXSW music nod + road-trip story</div>
+          <div class="why">
+            <div class="box"><strong>Why it works</strong>Feels festival-native. The “road to SXSW” story is built-in.</div>
+            <div class="box"><strong>Refine next</strong>Reduce internal detail; keep road bold and RV super simple so it holds on hats.</div>
+          </div>
+        </div>
+
+        <div class="dir">
+          <h3>Direction C — Map Pin Campsite</h3>
+          <div class="tag">Product story in one icon (book → destination → home shows up)</div>
+          <div class="why">
+            <div class="box"><strong>Why it works</strong>Most scalable “mark” option; can live beyond SXSW if we drop the event text.</div>
+            <div class="box"><strong>Refine next</strong>One interior motif only (RV OR campsite). Avoid tiny trees/lines.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="notes">
+      <h2>Notes</h2>
+      <ul>
+        <li>Text must include: <b>Outdoorsy</b> + <b>SXSW</b> + <b>Austin, TX</b> (ATX acceptable in some directions).</li>
+        <li>Future-proof: keep a 1–3 color version as the “core.” Avoid gradients.</li>
+        <li>Next step: pick the winning direction (A/B/C), then generate 6–10 tighter variations.</li>
+      </ul>
+
+      <div class="footer">Generated: 2026-02-26 · v1</div>
+    </section>
+  </article>
+
+  <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="backdrop" id="lbBackdrop"></div>
+    <div class="panel">
+      <div class="top">
+        <div><span id="lbCount">1 / 12</span> <span class="hint">· ESC to close</span></div>
+        <button class="btn" id="lbClose" type="button">Close</button>
+      </div>
+      <div class="imgwrap">
+        <button class="btn nav prev" id="lbPrev" type="button" aria-label="Previous">‹</button>
+        <img id="lbImg" alt="" />
+        <button class="btn nav next" id="lbNext" type="button" aria-label="Next">›</button>
+      </div>
+      <div class="cap" id="lbCap"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const thumbs = Array.from(document.querySelectorAll('.thumb'));
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lbImg');
+      const cap = document.getElementById('lbCap');
+      const count = document.getElementById('lbCount');
+      const closeBtn = document.getElementById('lbClose');
+      const back = document.getElementById('lbBackdrop');
+      const prev = document.getElementById('lbPrev');
+      const next = document.getElementById('lbNext');
+
+      let i = 0;
+
+      function render(){
+        const t = thumbs[i];
+        const src = t.getAttribute('data-src');
+        const c = t.getAttribute('data-cap') || '';
+        img.src = src;
+        img.alt = c || 'Concept';
+        cap.textContent = c;
+        count.textContent = `${i+1} / ${thumbs.length}`;
+      }
+
+      function openAt(idx){
+        i = idx;
+        render();
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      function go(dir){
+        i = (i + dir + thumbs.length) % thumbs.length;
+        render();
+      }
+
+      thumbs.forEach((t, idx)=>{
+        const btn = t.querySelector('button');
+        btn.addEventListener('click', ()=>openAt(idx));
+      });
+
+      closeBtn.addEventListener('click', close);
+      back.addEventListener('click', close);
+      prev.addEventListener('click', ()=>go(-1));
+      next.addEventListener('click', ()=>go(1));
+
+      window.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        if(e.key==='ArrowLeft') go(-1);
+        if(e.key==='ArrowRight') go(1);
+      });
+    })();
+  </script>
+</body>
+</html>

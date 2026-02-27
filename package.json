@@ -1,0 +1,11 @@
+{
+  "name": "rodeo-design-hub",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Rodeo Design Hub — local brief review + iteration hub (file-backed in Obsidian Vault)",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  }
+}
